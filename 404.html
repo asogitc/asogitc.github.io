@@ -1,2267 +1,290 @@
+<style>
+	body {
+  background: #000;
+  overflow: hidden;
+}
 
-<!DOCTYPE html>
-<html lang="en">
-<!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Asogi Tournament Cup</title>
-<meta name="generator" content="Jekyll v3.9.2" />
-<meta property="og:title" content="Home" />
-<meta property="og:locale" content="en_US" />
-<meta http-equiv="Permissions-Policy" content="interest-cohort=()">
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebPage","description":"Welcome to my personal tournament projects!","headline":"Home","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://asogitc.github.io/img/logo.png"}}}</script>
-<!-- End Jekyll SEO tag -->
+.fof {
+  margin: 10px 0;
+}
 
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
-    <meta property="og:image" content="/img/logo.png">
-    <link href="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/css/halfmoon-variables.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="/css/styles.css">
-    <link href="/css/lightbox.css" rel="stylesheet" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
-</head>
-<body class="with-custom-webkit-scrollbars with-custom-css-scrollbars dark-mode">
-    <!-- Modals go here -->
-    <!-- Reference: https://www.gethalfmoon.com/docs/modal -->
-    <!-- Page wrapper start -->
-    <div class="page-wrapper with-navbar with-sidebar with-transitions" data-sidebar-type="full-height overlayed-sm-and-down">
+.fof canvas,
+.fof img {
+  position: relative;
+	width: 100%;
+	height: 100%;
+	margin-bottom: 20px;
+	z-index: 1;
+	
+	background: #000;
+}
+</style>
+<script>
+	// The 404 page from my site http://hakim.se/404
+(function(){
   
-	<!-- Navbar start -->
-		<nav class="navbar d-md-none">
-    <div class="navbar-content">
-        <button class="btn btn-action" type="button" onclick="sidebar()">
-          <i class="fa fa-bars" aria-hidden="true"></i>
-          <span class="sr-only">Toggle sidebar</span> <!-- sr-only = show only on screen readers -->
-        </button>
-      </div>
-      <a href="/" class="navbar-brand">
-        Asogi Tournament Cup
-      </a>
-    </nav>
-    <!-- Reference: https://www.gethalfmoon.com/docs/navbar -->
-</nav>
-	<!-- Navbar end -->
+  var DISPLAY_WIDTH = window.innerWidth,
+    DISPLAY_HEIGHT = window.innerHeight,
+		DISPLAY_DURATION = 10;
+	
+	var	mouse = { x: 0, y: 0 },
+		container,
+		canvas,
+		context,
+		startTime,
+		eyes;
+	
+	function initialize() {
+		container = document.querySelector( '.fof' );
+		canvas = document.querySelector( '.fof>canvas' );
+		
+		if( canvas ) {
+			canvas.width = DISPLAY_WIDTH;
+			canvas.height = DISPLAY_HEIGHT;
+			
+			context = canvas.getContext( '2d' );
+			
+			window.addEventListener( 'mousemove', function( event ) {
+				mouse.x = event.clientX;
+				mouse.y = event.clientY;
+			}, false );
+			
+			eyes = [
+				new Eye( canvas,   0.19, 0.80,   0.88,    0.31 ), 
+				new Eye( canvas,   0.10, 0.54,   0.84,    0.32 ), 
+				new Eye( canvas,   0.81, 0.13,   0.63,    0.33 ), 
+				new Eye( canvas,   0.89, 0.19,   0.58,    0.34 ), 
+				new Eye( canvas,   0.40, 0.08,   0.97,    0.35 ), 
+				new Eye( canvas,   0.64, 0.74,   0.57,    0.36 ), 
+				new Eye( canvas,   0.41, 0.89,   0.56,    0.37 ), 
+				new Eye( canvas,   0.92, 0.89,   0.75,    0.38 ), 
+				new Eye( canvas,   0.27, 0.20,   0.87,    0.39 ), 
+				new Eye( canvas,   0.17, 0.46,   0.68,    0.41 ), 
+				new Eye( canvas,   0.71, 0.29,   0.93,    0.42 ), 
+				new Eye( canvas,   0.84, 0.46,   0.54,    0.43 ), 
+				new Eye( canvas,   0.93, 0.35,   0.63,    0.44 ), 
+				new Eye( canvas,   0.77, 0.82,   0.85,    0.45 ), 
+				new Eye( canvas,   0.36, 0.74,   0.90,    0.46 ), 
+				new Eye( canvas,   0.13, 0.24,   0.85,    0.47 ), 
+				new Eye( canvas,   0.58, 0.20,   0.77,    0.48 ), 
+				new Eye( canvas,   0.55, 0.84,   0.87,    0.50 ), 
+        
+        new Eye( canvas,   0.50, 0.50,   5.00,    0.10 ),
+			];
+			
+			startTime = Date.now();
+			
+			animate();
+		}
+	}
+	
+	function animate() {
+		// The number of seconds that have passed since initialization
+		var seconds = ( Date.now() - startTime ) / 1000;
+		
+		// Out with the old ...
+		context.clearRect( 0, 0, DISPLAY_WIDTH, DISPLAY_HEIGHT );
+		
+		// ... in with the new
+		for( var i = 0, len = eyes.length; i < len; i++ ) {
+			var eye = eyes[i];
+			
+			if( seconds > eye.activationTime * DISPLAY_DURATION ) {
+				eye.activate();
+			};
+			
+			eye.update( mouse );
+		}
+		
+		requestAnimFrame( animate );
+	}
+	
+  setTimeout( initialize, 1 );
+  
+})();
 
-	<!-- Sidebar start -->
-		<div class="sidebar-overlay" onclick="sidebar()"></div>
-<div class="sidebar">
-    <div class="sidebar-menu">
-        <a href="/" class="sidebar-brand">
-            <img src="/img/logo.png" alt="AsogiTC">
-        </a>
-    </div>
-    <h5 class="sidebar-title">Navigation</h5>
-    <div class="sidebar-divider"></div>
-    <!-- Sidebar links and titles -->
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <a class="sidebar-link" href="/faq">
-        FAQ
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <a class="sidebar-link" href="/bet">
-        Apuestas
-    </a>  
-    
-    
-    
-    
-    <a class="sidebar-link" href="/leader">
-        Leaderboards
-    </a>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+function Eye( canvas, x, y, scale, time ) {
+	this.canvas = canvas;
+	this.context = this.canvas.getContext( '2d' )
+	
+	// The time at which this eye will come alive
+	this.activationTime = time;
+	
+	// The speed at which the iris follows the mouse
+	this.irisSpeed = 0.01 + ( Math.random() * 0.2 ) / scale;
+	
+	// The speed at which the eye opens and closes
+	this.blinkSpeed = 0.2 + ( Math.random() * 0.2 );
+	this.blinkInterval = 5000 + 5000 * ( Math.random() );
+	
+	// Timestamp of the last blink
+	this.blinkTime = Date.now();
+	
+	this.scale = scale;
+	this.size = 70 * scale;
+	
+	this.x = x * canvas.width; 
+	this.y = y * canvas.height + ( this.size * 0.15 );
+	
+	this.iris = {
+		x: this.x,
+		y: this.y - ( this.size * 0.1 ),
+		size: this.size * 0.2
+	};
+	
+	this.pupil = {
+		width: 2 * scale,
+		height: this.iris.size * 0.75
+	};
+	
+	this.exposure = {
+		top: 0.1 + ( Math.random() * 0.3 ),
+		bottom: 0.5 + ( Math.random() * 0.3 ),
+		current: 0,
+		target: 1
+	};
+	
+	// Affects the amount of inner shadow
+	this.tiredness = ( 0.5 - this.exposure.top ) + 0.1;
+	
+	this.isActive = false;
+	
+	this.activate = function() {
+		this.isActive = true;
+	}
+	
+	this.update = function( mouse ) {
+		if( this.isActive === true ) {
+			this.render( mouse );
+		}
+	}
+	
+	this.render = function( mouse ) {
+		var time = Date.now();
+		
+		if( this.exposure.current < 0.012 ) {
+			this.exposure.target = 1;
+		}
+		else if( time - this.blinkTime > this.blinkInterval ) {
+			this.exposure.target = 0;
+			this.blinkTime = time;
+		}
+		
+		this.exposure.current += ( this.exposure.target - this.exposure.current ) * this.blinkSpeed;
+		
+		// Eye left/right
+		var el = { x: this.x - ( this.size * 0.8 ), y: this.y - ( this.size * 0.1 ) };
+		var er = { x: this.x + ( this.size * 0.8 ), y: this.y - ( this.size * 0.1 ) };
+		
+		// Eye top/bottom
+		var et = { x: this.x, y: this.y - ( this.size * ( 0.5 + ( this.exposure.top * this.exposure.current ) ) ) };
+		var eb = { x: this.x, y: this.y - ( this.size * ( 0.5 - ( this.exposure.bottom * this.exposure.current ) ) ) };
+		
+		// Eye inner shadow top
+		var eit = { x: this.x, y: this.y - ( this.size * ( 0.5 + ( ( 0.5 - this.tiredness ) * this.exposure.current ) ) ) };
+		
+		// Eye iris
+		var ei = { x: this.x, y: this.y - ( this.iris.size ) };
+		
+		// Offset the iris depending on mouse position
+		var eio = { 
+			x: ( mouse.x - ei.x ) / ( window.innerWidth - ei.x ), 
+			y: ( mouse.y ) / ( window.innerHeight )
+		};
+		
+		// Apply the iris offset
+		ei.x += eio.x * 16 * Math.max( 1, this.scale * 0.4 );
+		ei.y += eio.y * 10 * Math.max( 1, this.scale * 0.4 );
+		
+		this.iris.x += ( ei.x - this.iris.x ) * this.irisSpeed;
+		this.iris.y += ( ei.y - this.iris.y ) * this.irisSpeed;
+		
+		// Eye fill drawing
+		this.context.fillStyle = 'rgba(255,255,255,1.0)';
+		this.context.strokeStyle = 'rgba(100,100,100,1.0)';
+		this.context.beginPath();
+		this.context.lineWidth = 3;
+		this.context.lineJoin = 'round';
+		this.context.moveTo( el.x, el.y );
+		this.context.quadraticCurveTo( et.x, et.y, er.x, er.y );
+		this.context.quadraticCurveTo( eb.x, eb.y, el.x, el.y );
+		this.context.closePath();
+		this.context.stroke();
+		this.context.fill();
+		
+		// Iris
+		this.context.save();
+		this.context.globalCompositeOperation = 'source-atop';
+		this.context.translate(this.iris.x*0.1,0);
+		this.context.scale(0.9,1);
+		this.context.strokeStyle = 'rgba(0,0,0,0.5)';
+		this.context.fillStyle = 'rgba(130,50,90,0.9)';
+		this.context.lineWidth = 2;
+		this.context.beginPath();
+		this.context.arc(this.iris.x, this.iris.y, this.iris.size, 0, Math.PI*2, true);
+		this.context.fill();
+		this.context.stroke();
+		this.context.restore();
+		
+		// Iris inner
+		this.context.save();
+		this.context.shadowColor = 'rgba(255,255,255,0.5)';
+		this.context.shadowOffsetX = 0;
+		this.context.shadowOffsetY = 0;
+		this.context.shadowBlur = 2 * this.scale;
+		this.context.globalCompositeOperation = 'source-atop';
+		this.context.translate(this.iris.x*0.1,0);
+		this.context.scale(0.9,1);
+		this.context.fillStyle = 'rgba(255,255,255,0.2)';
+		this.context.beginPath();
+		this.context.arc(this.iris.x, this.iris.y, this.iris.size * 0.7, 0, Math.PI*2, true);
+		this.context.fill();
+		this.context.restore();
+		
+		// Pupil
+		this.context.save();
+		this.context.globalCompositeOperation = 'source-atop';
+		this.context.fillStyle = 'rgba(0,0,0,0.9)';
+		this.context.beginPath();
+		this.context.moveTo( this.iris.x, this.iris.y - ( this.pupil.height * 0.5 ) );
+		this.context.quadraticCurveTo( this.iris.x + ( this.pupil.width * 0.5 ), this.iris.y, this.iris.x, this.iris.y + ( this.pupil.height * 0.5 ) );
+		this.context.quadraticCurveTo( this.iris.x - ( this.pupil.width * 0.5 ), this.iris.y, this.iris.x, this.iris.y - ( this.pupil.height * 0.5 ) );
+		this.context.fill();
+		this.context.restore();
+		
+		this.context.save();
+		this.context.shadowColor = 'rgba(0,0,0,0.9)';
+		this.context.shadowOffsetX = 0;
+		this.context.shadowOffsetY = 0;
+		this.context.shadowBlur = 10;
+		
+		// Eye top inner shadow
+		this.context.fillStyle = 'rgba(120,120,120,0.2)';
+		this.context.beginPath();
+		this.context.moveTo( el.x, el.y );
+		this.context.quadraticCurveTo( et.x, et.y, er.x, er.y );
+		this.context.quadraticCurveTo( eit.x, eit.y, el.x, el.y );
+		this.context.closePath();
+		this.context.fill();
+		
+		this.context.restore();
+		
+	}
+}
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <h5 class="sidebar-title">Eventos</h5>
-    <div class="sidebar-divider"></div>
-    
-    
-    <a class="sidebar-link" href="/persona">
-        Asogi Persona 4 Arena Ultimax Tournament
-    </a>
-    
-    <a class="sidebar-link" href="/spring">
-        Asogi Spring Cup 
-    </a>
-    
-    <h5 class="sidebar-title">Socials</h5>
-    <div class="sidebar-divider"></div>
-    <a href="https://twitch.tv" class="sidebar-link sidebar-link-with-icon">
-        <span class="sidebar-icon bg-twitch text-white rounded-circle"> <!-- bg-primary = background-color: var(--primary-color), text-white = color: white, rounded-circle = border-radius: 50% --> 
-          <i class="fa fa-brands fa-twitch" aria-hidden="true"></i>
-        </span>
-        Twitch
-    </a>
-    <a href="https://twitter.com" class="sidebar-link sidebar-link-with-icon">
-        <span class="sidebar-icon bg-twitter text-white rounded-circle"> <!-- bg-primary = background-color: var(--primary-color), text-white = color: white, rounded-circle = border-radius: 50% --> 
-          <i class="fa fa-brands fa-twitter" aria-hidden="true"></i>
-        </span>
-        Twitter
-    </a>
-    <a href="https://youtube.com" class="sidebar-link sidebar-link-with-icon">
-        <span class="sidebar-icon bg-youtube text-white rounded-circle"> <!-- bg-primary = background-color: var(--primary-color), text-white = color: white, rounded-circle = border-radius: 50% --> 
-          <i class="fa fa-brands fa-youtube" aria-hidden="true"></i>
-        </span>
-        Youtube
-    </a>
+// shim with setTimeout fallback from http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function(/* function */ callback, /* DOMElement */ element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+</script>
+<div class="fof">
+  <canvas></canvas>
 </div>
-	<!-- Sidebar end -->
-
-	<!-- Content wrapper start -->
-		<div class="content-wrapper">
-			<div class="front-video">
-				<video playsinline autoplay muted loop preload="none">
-					<source src="/img/demo.mp4" type="video/mp4">
-				</video>
-				<div class="hero">
-					<h1 class="hero-text font-weight-bold"> Persona 4 Arena Ultimax Tournament</h1>
-				</div>
-			</div>
-			<div class="container-fluid body">
-                <div class="row justify-content-center">
-                    <div class="col-xl-8">
-                            <div class="content">
-                                
-                                <h2 id="our-work">Condiciones</h2>
-<hr />
-<p>Torneo de eliminación doble el mejor de 3 en cada ronda, el ganador del loser bracket se enfrentará al finalista. Condiciones del match DEFAULT (TBD). Fecha: Domingo 19 de Febrero hora 2pm pa/co/pe/ec 4pm ar/ch/ur 1pm mx</p>
-<ul>
-    <li>Mínimo 8 participantes</li>
-    <li>Las copias serán entregadas por lo menos un día antes</li>
-    <li>Invitados a participar cualquier persona con su copia</li>
-  </ul>
-<h2 id="our-experience">Premios</h2>
-<hr />
-<p>Primer Lugar</p>
-<ul>
-  <li>TF2 Keys x 10</li>
-  <li>Jail Free Card x 2 ( Para salir del BL para ti o cualquier persona )</li>
-  <li>Posición asegurada en Asogi Spring Cup</li>
-  <li>Una ventaja o desventaja importante en la segunda categoría</li>
-</ul>
-<p>Segundo Lugar</p>
-<ul>
-  <li>TF2 Keys x 5</li>
-  <li>Jail Free Card x 1</li>
-  <li>Posición asegurada en Asogi Spring Cup</li>
-</ul>
-<p>Tercer Lugar</p>
-<ul>
-  <li>TF2 Keys x 3</li>
-</ul>
-
-<h2 id="who-weve-worked-with">Apuestas</h2>
-<hr />
-<p>Cualquier persona del servidor podrá unirse a las apuestas y redimir sus puntos por premios revisar la sección de apuestas para más información</p>
-<div class="container-fluid">
-<div class="d-flex flex-wrap flex-row justify-content-center">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-</div>
-	<!-- replace this with real tournament-->
-<img src="https://challonge.com/o7xblczu.svg">
-                            </div>
-                    </div>
-				</div>
-			</div>
-			<div class="container-fluid h-200 footer d-flex flex-column justify-content-center">
-    <div class="content text-center m-y-0">
-        <p id="quote" class="font-weight-semi-bold"></p>  
-        <p>Asogi Tournament Cup™</p>
-    </div>
-</div>
-		</div>
-	<!-- Content wrapper end -->
-    </div>
-    <!-- Page wrapper end -->
-<footer>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/halfmoon@1.1.1/js/halfmoon.min.js"></script>
-    <script src="https://kit.fontawesome.com/ec45b90910.js" crossorigin="anonymous"></script>
-    <script src="/js/scripts.js"></script>
-    <script src="/js/lightbox.js"></script>
-    <script>
-        lightbox.option({
-        'resizeDuration': 200,
-        'positionFromTop' : 10,
-        'imageFadeDuration': 0,
-        'fadeDuration': 0
-        })
-    </script>
-</footer>
-</body>
